@@ -15,7 +15,13 @@ class ProductRepositoryImpl(
         }
     }
 
-    override fun createProduct(product: Product): Int {
+    override suspend fun createProduct(product: Product): Int {
         return 0
     }
+
+    override suspend fun deleteProduct(product: Product): Boolean {
+        TODO("Not yet implemented")
+    }
+
+
 }
