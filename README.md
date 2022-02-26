@@ -22,7 +22,7 @@ data class Product(
 )
 ```
 
-I created a repository interface too, this is to know what I going test with mock wev server. Here I'll use the `getProducts` to test the GET method, the `createProduct` to test the POST method and the `deleteProduct` to test the DELETE method.
+I created a repository interface too, this is to know what I'm going to test with mock wev server. Here I'll use the `getProducts` to test the GET method, the `createProduct` to test the POST method and the `deleteProduct` to test the DELETE method.
 ```kt
 interface ProductRepository {
     suspend fun getProducts(): List<Product>
@@ -30,3 +30,45 @@ interface ProductRepository {
     suspend fun deleteProduct(product: Product): Boolean
 }
 ```
+
+Now we can go to infra package to start to implement the ProductRepository.
+
+First things first, I created the responses files to convert json to a data class, realize that `toProduct` method was used to convert `ProductResponse` to the product entity.
+
+```kt
+data class ProductListResponse (
+    @SerializedName("results")
+    val products: List<ProductResponse>
+)
+
+data class ProductResponse(
+    @SerializedName("id")
+    val id: String,
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("price")
+    val price: Float,
+    @SerializedName("quantity")
+    val quantity: Int
+){
+    fun toProduct() = Product(
+        id = id,
+        name = name,
+        price = price,
+        quantity = quantity
+    )
+}
+```
+
+After that I created the service interface that will be used by Retrofit to make a request to server. In this file pay attention to the imports, `GET` and `Response` need be packages from retrofit
+
+```kt
+import retrofit2.Response
+import retrofit2.http.GET
+
+interface ProductService {
+    @GET("products")
+    suspend fun getProducts(): Response<ProductListResponse>
+}
+```
+

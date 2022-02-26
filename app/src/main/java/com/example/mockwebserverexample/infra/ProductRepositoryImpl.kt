@@ -20,7 +20,7 @@ class ProductRepositoryImpl(
     }
 
     override suspend fun deleteProduct(product: Product): Boolean {
-        TODO("Not yet implemented")
+        return true
     }
 
 
