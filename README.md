@@ -10,6 +10,7 @@ implementation "com.squareup.retrofit2:retrofit:2.9.0"
 implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
 testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.1'
+testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
 ```
 
 As I was using clean code, I decided to start by creating the entity inside the domain folder. In this example I used a product object:
