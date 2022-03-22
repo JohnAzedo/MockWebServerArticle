@@ -22,6 +22,4 @@ class ProductRepositoryImpl(
     override suspend fun deleteProduct(product: Product): Boolean {
         return true
     }
-
-
 }

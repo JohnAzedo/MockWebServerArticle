@@ -27,8 +27,6 @@ I created a repository interface too, this is to know what I'm going to test wit
 ```kt
 interface ProductRepository {
     suspend fun getProducts(): List<Product>
-    suspend fun createProduct(product: Product): Int
-    suspend fun deleteProduct(product: Product): Boolean
 }
 ```
 
@@ -72,4 +70,63 @@ interface ProductService {
     suspend fun getProducts(): Response<ProductListResponse>
 }
 ```
+
+Then I implemented the `ProductRepository` to a ProductRepositoryImpl class. This is a simple implementation to get response and transform this in a products array:
+
+```kt
+class ProductRepositoryImpl(
+    private val service: ProductService
+): ProductRepository{
+
+    override suspend fun getProducts(): List<Product> {
+        val response = service.getProducts().body()
+        val products = response?.products ?: listOf()
+        return products.map {
+            it.toProduct()
+        }
+    }
+}
+```
+
+Now let's go to the important part of this article, the creation of tests.
+
+To start this part we must create a mock json to simulate a server response, for this example, we can use a array of products. This json file must be created in the tests folder inside a resource folder:
+
+```json
+{
+  "results": [
+    {
+      "id": "3644",
+      "name": "Galaxy S10 plus",
+      "price": 3000.0,
+      "quantity": 20
+    },
+    {
+      "id": "3464",
+      "name": "Galaxy S22 plus",
+      "price": 8000.0,
+      "quantity": 40
+    },
+    {
+      "id": "7236",
+      "name": "IPhone 13",
+      "price": 5000.0,
+      "quantity": 50
+    },
+    {
+      "id": "3851",
+      "name": "IPhone 8 plus",
+      "price": 2000.0,
+      "quantity": 10
+    },
+    {
+      "id": "7364",
+      "name": "Nokia 1100",
+      "price": 100.0,
+      "quantity": 5
+    }
+  ]
+}
+```
+
 
